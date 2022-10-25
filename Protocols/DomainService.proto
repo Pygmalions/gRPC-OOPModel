@@ -1,0 +1,56 @@
+﻿syntax = "proto3";
+
+import "EntityId.proto";
+import "google/protobuf/empty.proto";
+
+package Nebula.Protocols;
+
+message EntityValidation
+{
+  bool Valid = 1;
+}
+
+message EntityList
+{
+  repeated EntityId Entities = 1;
+}
+
+message ServerName
+{
+  string Name = 1;
+}
+
+message ServerEntry
+{
+  string Name = 1;
+  string Uri = 2;
+}
+
+message ServerUri
+{
+  optional string Uri = 1;
+}
+
+service DomainService
+{
+  // Create an entity.
+  rpc CreateEntity (google.protobuf.Empty) returns (EntityId);
+
+  // Delete the specified entity.
+  rpc DeleteEntity (EntityId) returns (google.protobuf.Empty);
+
+  // Check whether an entity is valid or not.
+  rpc VerifyEntity (EntityId) returns (EntityValidation);
+
+  /// List all entities in this domain.
+  rpc ListEntities (google.protobuf.Empty) returns (EntityList);
+
+  // Search a server from this domain.
+  rpc SearchServer (ServerName) returns (ServerUri);
+
+  // Register a server to this domain.
+  rpc RegisterServer (ServerEntry) returns (google.protobuf.Empty);
+
+  // Unregister a server from this domain.
+  rpc UnregisterServer (ServerEntry) returns (google.protobuf.Empty);
+}

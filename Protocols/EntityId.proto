@@ -1,0 +1,9 @@
+﻿syntax = "proto3";
+
+package Nebula.Protocols;
+
+// A unsigned 32-bit integer is used to identify an entity.
+message EntityId
+{
+  uint32 Id = 1;
+}

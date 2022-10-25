@@ -1,0 +1,39 @@
+﻿syntax = "proto3";
+
+import "ComponentId.proto";
+import "ComponentUri.proto";
+import "google/protobuf/empty.proto";
+
+package Nebula.Protocols;
+
+message ComponentInformation
+{
+  // Name of this component.
+  string Name = 1;
+  // Uri of the component server.
+  string Uri = 2;
+}
+
+message ComponentList
+{
+  repeated ComponentList Components = 1;
+}
+
+// This service allows users to manipulate entities, and its provided by Nebula Nexus.
+service EntityService
+{
+  // Get the component server uri of a component.
+  rpc GetComponent (ComponentId) returns (ComponentUri);
+  
+  // Attach a component to this entity.
+  rpc AttachComponent (ComponentUri) returns (google.protobuf.Empty);
+
+  // Detach a component from this entity.
+  rpc DetachComponent (ComponentUri) returns (google.protobuf.Empty);
+
+  // List all components of this entity.
+  rpc ListComponents (google.protobuf.Empty) returns (ComponentList);
+  
+  // Configure this entity. This method will call configure method of all components.
+  rpc Configure (google.protobuf.Empty) returns (ComponentList);
+}

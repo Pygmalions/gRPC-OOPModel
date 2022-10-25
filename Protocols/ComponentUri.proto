@@ -1,0 +1,8 @@
+﻿syntax = "proto3";
+
+package Nebula.Protocols;
+
+message ComponentUri
+{
+  optional string Uri = 1;
+}

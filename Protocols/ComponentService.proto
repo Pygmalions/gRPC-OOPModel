@@ -1,0 +1,93 @@
+﻿syntax = "proto3";
+
+import "PropertyId.proto";
+import "google/protobuf/empty.proto";
+
+package Nebula.Protocols;
+
+enum PropertyRole
+{
+  Status = 0;
+  Setting = 1;
+}
+
+message PropertyInformation
+{
+  // Name of the property.
+  string Name = 1;
+  // Name of the protocol of the data.
+  string Protocol = 2;
+  // Role of this property.
+  PropertyRole Role = 3;
+}
+
+message PropertyList
+{
+  repeated PropertyInformation Properties = 1;
+}
+
+enum DataType
+{
+  Bytes = 0;
+  JSON = 1;
+}
+
+message PropertyMonitorRequest
+{
+  // Name of the property to monitor.
+  string Name = 1;
+  // Recommended interval milliseconds to publish the data.
+  uint32 IntervalMilliseconds = 2;
+  // Recommended type of data to publish.
+  DataType Type = 3;
+}
+
+message PropertyReadingRequest
+{
+  // Name of the property.
+  string Name = 1;
+  // Recommended type of data to read.
+  DataType Type = 2;
+}
+
+message PropertyContent
+{
+  // Name of the property.
+  string Name = 1;
+  // Recommended type of data to read.
+  DataType Type = 2;
+  
+  oneof Content 
+  {
+    bytes Data = 3;
+    string JSON = 5;
+  }
+}
+
+// This service is provided by Nebula Server.
+service ComponentService
+{
+  // Command the component server to attach a component to the specified entity.
+  rpc AttachComponent (google.protobuf.Empty) returns (google.protobuf.Empty);
+  
+  // Command the component server to detach the component from the specified entity.
+  rpc DetachComponent (google.protobuf.Empty) returns (google.protobuf.Empty);
+  
+  // Command the component server to reconfigure the component of the specified entity.
+  rpc ConfigureComponent (google.protobuf.Empty) returns (google.protobuf.Empty);
+  
+  // List all properties of this component.
+  rpc ListProperties (google.protobuf.Empty) returns (PropertyList);
+  
+  // Get the data of a property.
+  rpc GetPropertyData (PropertyReadingRequest) returns (PropertyContent);
+  
+  // Set the data of a property.
+  rpc SetPropertyData (PropertyContent) returns (google.protobuf.Empty);
+  
+  // Start to monitor a property.
+  rpc StartMonitor (PropertyMonitorRequest) returns (google.protobuf.Empty);
+  
+  // Stop monitoring a property.
+  rpc StopMonitor (PropertyId) returns (google.protobuf.Empty);
+}
