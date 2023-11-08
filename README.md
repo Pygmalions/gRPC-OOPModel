@@ -1,2 +1,2 @@
-# Nebula
-A component-oriented distributed embodied AI system framework.
+# gRPC-OOPModel
+Introduce OOP style into gRPC application development.
